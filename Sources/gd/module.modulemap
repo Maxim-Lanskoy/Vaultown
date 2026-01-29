@@ -1,0 +1,5 @@
+module gd [system] {
+    header "shim.h"
+    link "gd"
+    export *
+}

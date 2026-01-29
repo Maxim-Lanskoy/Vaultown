@@ -1,0 +1,74 @@
+# Docker Compose file for Vaultown Bot
+#
+# Install Docker on your system to run and test
+# your app in a production-like environment.
+#
+#   Build images: docker compose build
+#      Start all: docker compose up -d
+#       Stop all: docker compose down
+#
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: Vaultown-Postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-VaultUser}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+      POSTGRES_DB: ${DB_NAME:-VaultDB}
+    volumes:
+      - vault_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-VaultUser} -d ${DB_NAME:-VaultDB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: vaultown:latest
+    container_name: Vaultown-Telegram
+    restart: unless-stopped
+    build:
+      context: .
+    volumes:
+      - ./Localizations:/app/Localizations:ro
+      - ./.env:/app/.env:ro
+      - ./logs:/app/logs
+    env_file:
+      - .env
+    environment:
+      PROJECT_PATH: /app
+      LOG_LEVEL: ${LOG_LEVEL:-debug}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-VaultUser}
+      DB_PASSWORD: ${DB_PASSWORD:-secret}
+      DB_NAME: ${DB_NAME:-VaultDB}
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  pgweb:
+    image: sosedoff/pgweb:latest
+    container_name: Vault-PGWeb
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://${DB_USER:-VaultUser}:${DB_PASSWORD:-secret}@postgres:5432/${DB_NAME:-VaultDB}?sslmode=disable
+    ports:
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  vault_pgdata:

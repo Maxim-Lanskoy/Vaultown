@@ -1,0 +1,36 @@
+# ┌─────────────── Project Build Artifacts ───────────────┐
+# Generated or build-specific you don't want versioned
+.DS_Store
+.build
+Thumbs.db
+*~
+
+# ┌────────────── Development Tool Configs ───────────────┐
+# IDE/editor-specific settings and user-local caches
+.vscode
+.claude
+xcuserdata
+*.xcodeproj
+
+# ┌────────────── Python Environments & Dependencies ──────┐
+# Local virtual environments, package states, and env files
+.venv
+.swiftpm
+*.resolved
+
+# ┌────────────── Environment and Secrets Files ────────────┐
+# Environment files; .env.* are ignored except the sample
+.env
+.env.*
+!.env.example
+
+# ┌────────────── Database and Runtime Files ──────────────┐
+# Local runtime artifacts you don't want in Git
+*.sqlite
+pgweb*
+
+# ┌────────────── Godot Related Internal Files ──────────────┐
+# Local runtime artifacts you don't want in Git
+.godot/
+/android/
+*.dylib

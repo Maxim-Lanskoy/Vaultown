@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=3 uid="uid://d20main"]
+
+[sub_resource type="GDScript" id="GDScript_main"]
+script/source = "extends Node2D
+
+func _ready():
+	print(\"Vaultown Mobile Starting...\")
+
+	# Check if Swift classes are available
+	if ClassDB.class_exists(\"GameMain\"):
+		print(\"✓ GameMain class found!\")
+		var game = ClassDB.instantiate(\"GameMain\")
+		add_child(game)
+	else:
+		print(\"✗ GameMain class NOT found\")
+		print(\"Available custom classes:\")
+		# Show a message on screen
+		var label = Label.new()
+		label.text = \"SwiftGodot classes not loaded.\\nCheck GDExtension configuration.\"
+		label.position = Vector2(200, 300)
+		add_child(label)
+"
+
+[node name="Main" type="GameMain"]
+script = SubResource("GDScript_main")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(360, 640)
