@@ -31,6 +31,5 @@ pgweb*
 
 # ┌────────────── Godot Related Internal Files ──────────────┐
 # Local runtime artifacts you don't want in Git
-.godot/
-/android/
+Vault-2D/Godot/.godot/
 *.dylib

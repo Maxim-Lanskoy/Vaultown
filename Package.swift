@@ -15,17 +15,17 @@ let package = Package(
     ],
     dependencies: [
         // 🪽 Lightweight, flexible HTTP server framework written in Swift.
-        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.10.0"),
+        .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.20.0"),
         // 🗄 An ORM for SQL and NoSQL databases.
         .package(url: "https://github.com/vapor/fluent.git", from: "4.13.0"),
         // 🐘 Fluent driver for PostgreSQL.
-        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.10.0"),
+        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.12.0"),
         // 🔵 Non-blocking, event-driven networking for Swift. Used for custom executors
-        .package(url: "https://github.com/apple/swift-nio.git", from: "2.92.0"),
+        .package(url: "https://github.com/apple/swift-nio.git", from: "2.94.0"),
         // 🌐 Async HTTP client for Swift.
-        .package(url: "https://github.com/swift-server/async-http-client.git", from: "1.25.0"),
+        .package(url: "https://github.com/swift-server/async-http-client.git", from: "1.30.3"),
         // ✈ A Swift wrapper for the Telegram API.
-        .package(url: "https://github.com/nerzh/swift-telegram-sdk", from: "4.2.2"),
+        .package(url: "https://github.com/nerzh/swift-telegram-sdk", from: "4.3.0"),
         // 🔑 A dotenv library for Swift.
         .package(url: "https://github.com/thebarndog/swift-dotenv.git", from: "2.1.0"),
         // 🗺️ Lingo: A Swift package for localization.

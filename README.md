@@ -1,24 +1,37 @@
-# Vaultown [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)](https://github.com/Maxim-Lanskoy/GPTGram/actions) [![Swift](https://img.shields.io/badge/Swift-6.2-orange)](https://github.com/swiftlang/swift/releases/tag/swift-6.2-RELEASE) [![Hummingbird](https://img.shields.io/badge/Hummingbird-2.10-blue)](https://github.com/hummingbird-project/hummingbird) – Telegram D&D 5e RPG Bot
+# Vaultown [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?logo=github)](https://github.com/Maxim-Lanskoy/Vaultown/actions) [![Swift](https://img.shields.io/badge/Swift-6.2.3-DE5D43?logo=swift)](https://github.com/swiftlang/swift/releases/tag/swift-6.2.3-RELEASE) [![Hummingbird](https://img.shields.io/badge/Hummingbird-2.20-F7CD7A)](https://github.com/hummingbird-project/hummingbird) [![Fluent](https://img.shields.io/badge/Fluent-4.13-67C1F9)](https://docs.vapor.codes/fluent/overview/) [![Godot](https://img.shields.io/badge/Godot-4.5.1-478CBF)](https://godotengine.org/) [![Platform](https://img.shields.io/badge/Platform-Telegram%20%7C%20iOS%20%7C%20Android-lightgrey?logo=telegram)]()
 
 <table>
   <tr>
-    <td width="160" valign="top" halign="center">
-      <img src="./icon.png" alt="Vaultown Icon" width="160">
+    <td width="160" valign="top" align="center">
+       <img src="./icon.png" alt="Vaultown Icon" width="160">
     </td>
-    <td width="240" valign="top" halign="center">
+    <td width="280" valign="top">
       <ul>
         <li><a href="https://docs.hummingbird.codes">Hummingbird Documentation</a></li>
         <li><a href="https://docs.vapor.codes/fluent/overview/#fluent">Fluent ORM / PostgreSQL</a></li>
         <li><a href="https://core.telegram.org/bots/api">Telegram Bot API</a></li>
         <li><a href="https://github.com/nerzh/swift-telegram-sdk">Swift Telegram SDK</a></li>
-        <li><a href="https://openai.com/index/gpt-4-1/">OpenAI GPT-4.1</a></li>
+        <li><a href="https://github.com/migueldeicaza/SwiftGodot">SwiftGodot</a></li>
       </ul>
     </td>
-    <td width="440" valig="top" haligh="center">
-    <b>Vaultown</b> is an interactive Vaultown, cross-platform multiplayer game, which is a management simulation with RPG elements. Under the hood it's a modern <b>Swift 6.2 + Hummingbird</b> app with <b>FluentPostgresDriver</b>, <b>SwiftTelegramSdk</b>, and <b>Lingo</b> for localization.
+    <td width="440" valign="top">
+      <b>Vaultown</b> is a multiplayer vault management RPG inspired by Fallout Shelter. Built entirely in Swift, it features a Telegram bot interface and a Godot-based mobile client sharing the same game logic and database. Players manage underground bunkers, assign dwellers, explore the wasteland, and collaborate with others.
     </td>
   </tr>
 </table>
+
+> **📖 Game Design Document:** For complete game mechanics, formulas, S.P.E.C.I.A.L. system, room details, equipment lists, and all gameplay rules, see [GDD.md](GDD.md).
+
+---
+
+## Table of Contents
+
+1. [Tech Stack](#tech-stack)
+2. [Project Structure](#project-structure)
+3. [Architecture](#architecture)
+4. [Localization](#localization)
+5. [Setup & Installation](#setup--installation)
+6. [Development Roadmap](#development-roadmap)
 
 ---
 
@@ -32,6 +45,7 @@
 * **SwiftTelegramSdk** 4.x (Telegram Bot API)
 * **SwiftDotenv** 2.x (environment config)
 * **Lingo** 4.x (localization)
+* **Godot** 4.5 + **SwiftGodot** (mobile client)
 
 `Package.swift` (excerpt):
 
@@ -51,16 +65,42 @@
 
 ---
 
+## Project Structure
+
+```
+Vaultown/
+├── Package.swift              # Main Swift package
+├── Swift/
+│   ├── entrypoint.swift       # Application entry point
+│   ├── configure.swift        # Hummingbird configuration
+│   ├── routes.swift           # HTTP routes (for Godot API)
+│   ├── Controllers/           # Bot controllers (screens/states)
+│   ├── Models/                # Database models (Fluent ORM)
+│   ├── Migrations/            # Database schema migrations
+│   ├── Helpers/               # Utility extensions
+│   └── Telegram/
+│       ├── Router/            # Routing system
+│       └── TGBot/             # Bot infrastructure
+├── GameLogic/                 # Shared game mechanics (SPM package)
+├── Vault-2D/                  # Godot client (SwiftGodot)
+├── Localizations/             # Multi-language support (en.json, uk.json)
+├── docker-compose.yml
+├── Dockerfile
+└── .env.example
+```
+
+---
+
 ## Architecture
 
-### Router–Controller pattern
+### Router–Controller Pattern
 
 The bot implements a stateful router that maps Telegram updates to **controllers** (like screens/flows):
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     TGBot + Dispatcher                       │
-│           (Bot instance stored in AppState)                  │
+│                     TGBot + Dispatcher                      │
+│           (Bot instance stored in AppState)                 │
 └─────────────────────────────────────────────────────────────┘
                                │
           ┌────────────────────┼────────────────────┐
@@ -72,71 +112,85 @@ The bot implements a stateful router that maps Telegram updates to **controllers
                                │
                     ┌──────────┴──────────┐
                     ▼                     ▼
-        ┌─────────────────────┐   ┌───────────────────┐
-        │    Controllers      │   │   User Sessions   │
-        │ (Handle "UI" logic) │   │ (Persistent state)│
-        └─────────────────────┘   └───────────────────┘
+        ┌─────────────────────┐   ┌────────────────────┐
+        │    Controllers      │   │   User Sessions    │
+        │ (Handle "UI" logic) │   │ (Persistent state) │
+        └─────────────────────┘   └────────────────────┘
 ```
 
 Each controller encapsulates its own logic and UI flow. A shared `Context` provides the Telegram client, DB, localization, user session, and parsed arguments.
 
-### Bot actor & concurrency
+### Bot Actor & Concurrency
 
 Swift **async/await** is used for all I/O (Telegram, DB, APIs), keeping the bot responsive while multiple players interact concurrently. An **AppState** class holds shared dependencies (database, lingo, HTTP client, bot instance).
 
-### Project structure
+### Controller Template
 
+```swift
+final class VaultController: TGControllerBase, @unchecked Sendable {
+    typealias T = VaultController
+
+    override public func attachHandlers(to bot: TGBot, lingo: Lingo) async {
+        let router = Router(bot: bot) { router in
+            router[Commands.start.command()] = onStart
+            router[Commands.vault.command()] = onVaultView
+            router.unmatched = unmatched
+        }
+        await processRouterForEachName(router)
+    }
+
+    public func onStart(context: Context) async throws -> Bool {
+        try await showVaultMenu(context: context)
+        context.session.routerName = routerName
+        try await context.session.saveAndCache(in: context.db)
+        return true
+    }
+}
 ```
-Vaultown/
-├── Swift/
-│   ├── Controllers/              # Bot controllers (screens/states)
-│   │   ├── AllControllers.swift  # Controller registry
-│   │   ├── MainController.swift  # Main menu controller
-│   │   ├── RegistrationController.swift
-│   │   ├── SettingsController.swift
-│   │   └── GlobalCommandsController.swift # Global command handlers
-│   │
-│   ├── Models/                   # Database models (Fluent ORM)
-│   │   └── User.swift            # User session and preferences
-│   │
-│   ├── Migrations/               # Database schema migrations
-│   │   └── CreateUser.swift
-│   │
-│   ├── Telegram/
-│   │   ├── Router/               # Routing system
-│   │   │   ├── Router.swift      # Main router logic
-│   │   │   ├── Context.swift     # Request context
-│   │   │   ├── Commands.swift    # Command definitions
-│   │   │   ├── ContentType.swift # Message content types
-│   │   │   ├── Arguments.swift   # Command argument parsing
-│   │   │   └── Router+Helpers.swift
-│   │   │
-│   │   └── TGBot/                # Bot infrastructure
-│   │       ├── TGDispatcher.swift        # Unified dispatcher
-│   │       └── HummingbirdTGClient.swift # AsyncHTTPClient for TG API
-│   │
-│   ├── Helpers/
-│   │   ├── TGBot+Extensions.swift  # Convenience extensions
-│   │   ├── SessionCache.swift      # User session caching
-│   │   ├── Lingo+Locales.swift     # Locale type-safe extensions
-│   │   └── DotEnv+Env.swift        # Environment helpers
-│   │
-│   ├── entrypoint.swift         # Application entry point
-│   ├── configure.swift          # Hummingbird configuration
-│   └── routes.swift             # Router store for controllers
-│
-├── Localizations/               # Multi-language support
-│   ├── en.json                  # English translations
-│   └── uk.json                  # Ukrainian translations
-│
-├── PostgreSQL/                  # PostgreSQL data (Docker volume)
-├── Public/
-│   └── favicon.ico
-├── docker-compose.yml
-├── Dockerfile
-├── .env.example
-├── Package.swift
-└── README.md
+
+### Controller Registration
+
+Location: `Swift/Controllers/AllControllers.swift`
+
+```swift
+struct Controllers {
+    static let mainController = MainController(routerName: "main")
+    static let vaultController = VaultController(routerName: "vault")
+    static let settingsController = SettingsController(routerName: "settings")
+
+    static let all: [TGControllerBase] = [
+        mainController, vaultController, settingsController
+    ]
+}
+```
+
+---
+
+## Localization
+
+Strings live in `Localizations/*.json` and are served via **Lingo**.
+
+```swift
+let text = lingo.localize("welcome", locale: user.locale,
+  interpolations: ["full-name": user.name])
+```
+
+Keep **all** user-facing text out of code; add keys to JSON. English is provided; add more by creating additional JSON files and registering the locale in `configure.swift`.
+
+**Example keys:**
+
+```json
+{
+  "commands": {
+    "vault": "🏠 Vault",
+    "explore": "🗺️ Explore",
+    "inventory": "🎒 Inventory"
+  },
+  "vault": {
+    "status": "Power ⚡ {power}, Water 💧 {water}, Food 🍲 {food}",
+    "incident_alert": "🚨 {incident_type} in {room_name}!"
+  }
+}
 ```
 
 ---
@@ -145,14 +199,12 @@ Vaultown/
 
 ### Prerequisites
 
-* **Swift 6.2+** (and Xcode 16+ on macOS, optional)
-* **Docker** (for PostgreSQL)
-* **Telegram Bot Token** from @BotFather
-* **OpenAI API Key** (optional, for AI quests)
+- **Swift 6.2+** (Xcode 16+ on macOS optional)
+- **Docker** (for PostgreSQL)
+- **Telegram Bot Token** from @BotFather
+- **OpenAI API Key** (optional, for AI features)
 
-### Docker PostgreSQL setup
-
-Start PostgreSQL with Docker:
+### Docker PostgreSQL Setup
 
 ```bash
 docker run -d \
@@ -165,85 +217,43 @@ docker run -d \
   postgres:16-alpine
 ```
 
-### Local setup
+### Local Setup
 
 1. **Clone**
-
 ```bash
 git clone <repo-url>
 cd Vaultown
 ```
 
-2. **Configure env**
-
+2. **Configure environment**
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your settings:
-
+Edit `.env`:
 ```env
-# Telegram Configuration
 TELEGRAM_BOT_TOKEN=YOUR_BOT_TOKEN_HERE
-
-# PostgreSQL Connection
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=VaultUser
 DB_PASSWORD=your-secure-password
 DB_NAME=VaultDB
-
-# OpenAI (optional)
-OPENAI_API_KEY=your-openai-key
+OPENAI_API_KEY=your-openai-key  # optional
 ```
 
 3. **Build & Run**
-
 ```bash
 swift build
 swift run
 ```
 
-The bot will automatically run migrations on startup. Open Telegram, start the bot, and follow the prompts.
-
-### Docker Commands Reference
-
-```bash
-# Check if container is running
-docker ps
-
-# View logs
-docker logs vaultown-postgres
-
-# Stop container
-docker stop vaultown-postgres
-
-# Start existing container
-docker start vaultown-postgres
-
-# Remove container (data persists in volume)
-docker rm vaultown-postgres
-
-# Connect to psql shell
-docker exec -it vaultown-postgres psql -U VaultUser -d VaultDB
-
-# Remove volume (WARNING: deletes all data)
-docker volume rm vault_pgdata
-```
-
-### Docker Compose setup
-
-For a complete setup with both PostgreSQL and the bot:
+### Docker Compose (Full Stack)
 
 ```bash
 docker-compose up --build
 ```
 
-This brings up Postgres and the Vaultown bot, applies migrations, and begins polling Telegram.
-
----
-
-## Environment Variables
+### Environment Variables
 
 | Variable | Description | Required |
 |----------|-------------|----------|
@@ -253,45 +263,55 @@ This brings up Postgres and the Vaultown bot, applies migrations, and begins pol
 | `DB_USER` | PostgreSQL username | Yes |
 | `DB_PASSWORD` | PostgreSQL password | Yes |
 | `DB_NAME` | PostgreSQL database name | Yes |
-| `OPENAI_API_KEY` | OpenAI API key for AI quests | No |
+| `OPENAI_API_KEY` | OpenAI API key | No |
+| `LOG_LEVEL` | Logging verbosity | No |
+
+### Health Check
+
+Hummingbird provides endpoint: `http://localhost:8080/health`
 
 ---
 
-## Working with Keyboards (examples)
+## Development Roadmap
 
-**Reply keyboard** (persistent):
+### Phase 1: Telegram MVP
 
-```swift
-let markup = TGReplyKeyboardMarkup(
-  keyboard: [[TGKeyboardButton(text: "Button 1"), TGKeyboardButton(text: "Button 2")]],
-  resizeKeyboard: true
-)
-```
+- [ ] Implement all core game mechanics in GameLogic
+- [ ] Vault building and room management
+- [ ] Dweller system with S.P.E.C.I.A.L.
+- [ ] Resource production and collection
+- [ ] Basic incidents (fires, radroaches, raiders)
+- [ ] Wasteland exploration (automatic)
+- [ ] Equipment and inventory
+- [ ] Multiplayer basics (referrals, co-management)
+- [ ] Basic guild system
+- [ ] Item trading/marketplace
 
-**Inline keyboard** (under message):
+### Phase 2: Mobile Client Alpha
 
-```swift
-let inline = TGInlineKeyboardMarkup(
-  inlineKeyboard: [[TGInlineKeyboardButton(text: "Click", callbackData: "action:123")]]
-)
-```
+- [ ] Godot/SwiftGodot client development
+- [ ] 2D vault visualization
+- [ ] REST API for Godot
+- [ ] WebSocket real-time sync
+- [ ] Touch controls
+
+### Phase 3: Rich Features
+
+- [ ] Interactive quests with combat
+- [ ] Party system for quests
+- [ ] Guild chat and events
+- [ ] Monetization (store, purchases)
+- [ ] Mr. Handy robots
+- [ ] Lunchbox system
+
+### Phase 4: Late-Game & Polish
+
+- [ ] Advanced rooms (Nuclear Reactor, Bottler)
+- [ ] Research Center and crafting
+- [ ] Deathclaws and advanced threats
+- [ ] Cross-vault interactions
+- [ ] Leaderboards and events
 
 ---
 
-## Localization
-
-* Strings live in `Localizations/*.json` and are served via **Lingo**.
-* Use code like:
-
-```swift
-let text = lingo.localize("welcome", locale: user.locale,
-  interpolations: ["full-name": user.name])
-```
-
-* Keep **all** user‑facing text out of code; add keys to JSON. English is provided; add more by creating additional JSON files and registering the locale in `configure.swift`.
-
----
-
-## Health Check Endpoint
-
-Hummingbird provides a health check endpoint at `http://localhost:8080/health` for monitoring.
+*Welcome to Vaultown, Overseer. Good luck rebuilding civilization — one vault at a time.*

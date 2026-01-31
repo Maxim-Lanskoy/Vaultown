@@ -36,7 +36,7 @@ services:
     volumes:
       - ./Localizations:/app/Localizations:ro
       - ./.env:/app/.env:ro
-      - ./logs:/app/logs
+      - ./Logs:/app/logs
     env_file:
       - .env
     environment:
