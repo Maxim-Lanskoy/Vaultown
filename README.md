@@ -154,12 +154,11 @@ Location: `Swift/Controllers/AllControllers.swift`
 
 ```swift
 struct Controllers {
-    static let mainController = MainController(routerName: "main")
     static let vaultController = VaultController(routerName: "vault")
     static let settingsController = SettingsController(routerName: "settings")
 
     static let all: [TGControllerBase] = [
-        mainController, vaultController, settingsController
+        vaultController, settingsController
     ]
 }
 ```

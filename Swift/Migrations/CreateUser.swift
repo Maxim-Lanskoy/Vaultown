@@ -15,7 +15,6 @@ struct CreateUser: AsyncMigration {
             .field("created_at", .datetime)
             .field("first_name", .string)
             .field("last_name", .string)
-            .field("current_chat_id", .uuid)
             .field("user_name", .string)
             .field("router_name", .string, .required, .sql(.default("main")))
             .field("locale", .string)

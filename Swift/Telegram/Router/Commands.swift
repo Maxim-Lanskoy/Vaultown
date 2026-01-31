@@ -10,12 +10,21 @@ import Lingo
 import SwiftTelegramBot
 
 enum Commands: String, Codable, CaseIterable {
-    
+
+    // Navigation
     case start = "commands.start"
     case cancel = "commands.cancel"
     case exit = "commands.exit"
     case settings = "commands.settings"
     case language = "commands.language"
+
+    // Vault
+    case vault = "commands.vault"
+    case dwellers = "commands.dwellers"
+    case resources = "commands.resources"
+    case build = "commands.build"
+    case rooms = "commands.rooms"
+    case assign = "commands.assign"
     
     func button(for session: User, _ lingo: Lingo) -> TGKeyboardButton {
         let startText = lingo.localize(self.rawValue, locale: session.locale)

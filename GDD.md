@@ -2144,7 +2144,7 @@ Vaultown/
 │   ├── routes.swift           # HTTP routes (for Godot API)
 │   ├── Controllers/           # Telegram bot controllers
 │   │   ├── AllControllers.swift   # Controller registry
-│   │   ├── MainController.swift   # Main menu
+│   │   ├── VaultController.swift  # Main vault menu
 │   │   ├── RegistrationController.swift
 │   │   ├── SettingsController.swift
 │   │   └── GlobalCommandsController.swift

@@ -27,18 +27,22 @@ final public class User: Model, @unchecked Sendable {
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
     
-    @Field(key: "user_name")
+    @OptionalField(key: "user_name")
     var userName: String?
-    
-    @Field(key: "first_name")
+
+    @OptionalField(key: "first_name")
     var firstName: String?
-    
-    @Field(key: "last_name")
+
+    @OptionalField(key: "last_name")
     var lastName: String?
-    
+
     @Field(key: "locale")
     var locale: String
-        
+
+    /// Player nickname (chosen during registration)
+    @OptionalField(key: "nickname")
+    var nickname: String?
+
     var name: String {
         if let firstName = firstName, let lastName = lastName {
             return "\(firstName) \(lastName)"

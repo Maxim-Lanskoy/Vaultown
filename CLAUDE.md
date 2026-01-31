@@ -90,7 +90,7 @@ Vaultown/
 │   ├── routes.swift           # HTTP routes (for Godot API)
 │   ├── Controllers/           # Telegram bot controllers
 │   │   ├── AllControllers.swift   # Controller registry
-│   │   ├── MainController.swift   # Main menu
+│   │   ├── ValutController.swift  # Main vault menu
 │   │   └── SettingsController.swift
 │   ├── Models/                # Database models (Fluent)
 │   │   └── User.swift
@@ -163,9 +163,9 @@ final class SomeController: TGControllerBase, @unchecked Sendable {
     }
     
     public func onStart(context: Context) async throws -> Bool {
-        let mainController = Controllers.mainController
-        try await mainController.showMainMenu(context: context)
-        context.session.routerName = mainController.routerName
+        let vaultController = Controllers.vaultController
+        try await vaultController.showVaultMenu(context: context)
+        context.session.routerName = vaultController.routerName
         try await context.session.saveAndCache(in: context.db)
         return true
     }
@@ -243,14 +243,14 @@ Location: `Swift/Controllers/AllControllers.swift`
 
 ```swift
 struct Controllers {
-    static let mainController = MainController(routerName: "main")
+    static let vaultController = VaultController(routerName: "vault")
     static let settingsController = SettingsController(routerName: "settings")
     static let worldController = FieldController(routerName: "field")
     static let combatController = CombatController(routerName: "combat")
     static let cityController = CityController(routerName: "city")
 
     static let all: [TGControllerBase] = [
-        mainController,
+        vaultController,
         settingsController,
         worldController,
         combatController,

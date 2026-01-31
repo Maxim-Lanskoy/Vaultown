@@ -15,9 +15,31 @@
 - [x] Session caching system
 - [x] Localization system (EN, UK)
 - [x] User model with basic fields
+- [x] User nickname field with validation (latin/cyrillic only)
 - [x] Registration, Main, Settings controllers
+- [x] Registration flow: language → nickname → main menu
 - [x] Global commands handler
 - [x] GameLogic package scaffolding
+
+**Phase 1 Progress (January 2026):**
+- [x] S.P.E.C.I.A.L. system implemented
+- [x] Dweller model with full stats, leveling, HP system
+- [x] Equipment system (Weapons, Outfits, Pets)
+- [x] Resource system (Power, Food, Water, Caps)
+- [x] Room types enum with all properties
+- [x] Vault and DwellerModel database models
+- [x] VaultController for basic vault view
+- [x] Dweller list and detail views
+- [x] Registration with nickname input (latin/cyrillic validation)
+- [x] Unique vault numbering system (GlobalCounter)
+- [x] Ethnic name variants for EN/UK locales
+- [x] Localized resource display strings
+- [x] Room model with position, level, production state
+- [x] RoomModel database model with migrations
+- [x] BuildController for room construction and upgrades
+- [x] Dweller assignment to rooms
+- [x] Localized room names (24 room types, EN/UK)
+- [x] Starting rooms created with new vault (8 rooms)
 
 ---
 
@@ -26,67 +48,68 @@
 ### 1.1 GameLogic Package - Character System
 
 **S.P.E.C.I.A.L. Stats:**
-- [ ] `SPECIAL.swift` - Enum with 7 stats (Strength, Perception, Endurance, Charisma, Intelligence, Agility, Luck)
-- [ ] `AbilityScores.swift` - Struct holding all 7 stats with min/max validation (1-10 base, 17 with outfit)
-- [ ] `StatModifier.swift` - Outfit/pet bonus system
+- [x] `SPECIAL.swift` - Enum with 7 stats (Strength, Perception, Endurance, Charisma, Intelligence, Agility, Luck)
+- [x] `AbilityScores.swift` - Struct holding all 7 stats with min/max validation (1-10 base, 17 with outfit)
+- [x] `StatModifier.swift` - Outfit/pet bonus system (implemented in `StatBonuses` struct)
 
 **Dweller Model:**
-- [ ] `Dweller.swift` - Base dweller struct with:
-  - [ ] Name (first/last from pools)
-  - [ ] S.P.E.C.I.A.L. stats
-  - [ ] Level (1-50)
-  - [ ] Current HP / Max HP
-  - [ ] Radiation level
-  - [ ] Happiness (0-100%)
-  - [ ] Gender
-  - [ ] Rarity (Common/Rare/Legendary)
-  - [ ] Equipment slots (weapon, outfit, pet)
-- [ ] `DwellerRarity.swift` - Common (12 pts), Rare (28 pts), Legendary (40 pts)
-- [ ] `NameGenerator.swift` - Random name generation from predefined pools
+- [x] `Dweller.swift` - Base dweller struct with:
+  - [x] Name (first/last from pools)
+  - [x] S.P.E.C.I.A.L. stats
+  - [x] Level (1-50)
+  - [x] Current HP / Max HP
+  - [x] Radiation level
+  - [x] Happiness (0-100%)
+  - [x] Gender
+  - [x] Rarity (Common/Rare/Legendary)
+  - [x] Equipment slots (weapon, outfit, pet)
+- [x] `DwellerRarity.swift` - Common (12 pts), Rare (28 pts), Legendary (40 pts)
+- [x] `NameGenerator.swift` - Random name generation from predefined pools
+- [x] Ethnic name variants for EN (English/American) and UK (Ukrainian) locales
 
 **HP & Leveling:**
-- [ ] `LevelingSystem.swift` - XP thresholds and HP calculation
-- [ ] HP formula: `HP per level = 2.5 + (Endurance × 0.5)`
-- [ ] Starting HP: 105 for all dwellers
-- [ ] Max HP: 644 (E17 throughout leveling)
+- [x] `LevelingSystem.swift` - XP thresholds and HP calculation (in `Dweller.swift`)
+- [x] HP formula: `HP per level = 2.5 + (Endurance × 0.5)`
+- [x] Starting HP: 105 for all dwellers
+- [x] Max HP: 644 (E17 throughout leveling)
 
 **Death & Revival:**
-- [ ] `RevivalSystem.swift` - Cost formula: `100 + (Level - 1) × 20 caps`
+- [x] `RevivalSystem.swift` - Cost formula: `100 + (Level - 1) × 20 caps` (in `Dweller.swift`)
 - [ ] 24-hour revival timer
 
 ### 1.2 GameLogic Package - Vault System
 
 **Room Types:**
-- [ ] `RoomType.swift` - Enum with all room types:
-  - [ ] Production: Power Generator, Nuclear Reactor, Diner, Garden, Water Treatment, Water Purification, Nuka-Cola Bottler
-  - [ ] Training: Weight Room, Armory, Fitness Room, Lounge, Classroom, Athletics Room, Game Room
-  - [ ] Medical: Medbay, Science Lab
-  - [ ] Special: Living Quarters, Storage Room, Radio Studio, Overseer's Office, Vault Door, Elevator
-  - [ ] Crafting: Weapon Workshop, Outfit Workshop, Theme Workshop, Barbershop
-- [ ] `RoomLevel.swift` - L1, L2, L3 with upgrade costs
-- [ ] `RoomSize.swift` - Single (2 dwellers), Double (4), Triple (6)
+- [x] `RoomType.swift` - Enum with all room types:
+  - [x] Production: Power Generator, Nuclear Reactor, Diner, Garden, Water Treatment, Water Purification, Nuka-Cola Bottler
+  - [x] Training: Weight Room, Armory, Fitness Room, Lounge, Classroom, Athletics Room, Game Room
+  - [x] Medical: Medbay, Science Lab
+  - [x] Special: Living Quarters, Storage Room, Radio Studio, Overseer's Office, Vault Door, Elevator
+  - [x] Crafting: Weapon Workshop, Outfit Workshop, Theme Workshop, Barbershop
+- [x] `RoomLevel.swift` - L1, L2, L3 with upgrade costs (in `Room.swift`)
+- [x] `RoomSize.swift` - Single (2 dwellers), Double (4), Triple (6) (in `Room.swift`)
 
 **Room Mechanics:**
-- [ ] `Room.swift` - Room instance with position, level, assigned dwellers
+- [x] `Room.swift` - Room instance with position, level, assigned dwellers
 - [ ] `RoomProduction.swift` - Production cycle calculations
 - [ ] `ProductionFormula.swift` - `Cycle Time = Base_Time / (1 + Total_SPECIAL / 10 + Happiness_Bonus)`
-- [ ] `RoomCapacity.swift` - Population and storage limits per room type
+- [x] `RoomCapacity.swift` - Population and storage limits per room type (in `RoomType.swift`)
 
 **Vault Grid:**
 - [ ] `VaultGrid.swift` - 2D grid layout (max 25 floors)
 - [ ] `RoomPlacement.swift` - Room placement validation
-- [ ] `RoomMerging.swift` - Adjacent same-type/level room merging
+- [x] `RoomMerging.swift` - Adjacent same-type/level room merging (implemented in BuildController)
 - [ ] `PowerGrid.swift` - Power distribution from source
 
 **Population Unlocks:**
-- [ ] `PopulationUnlocks.swift` - Room unlock thresholds (0-100 pop)
+- [x] `PopulationUnlocks.swift` - Room unlock thresholds (0-100 pop) (in `RoomType.swift`)
 
 ### 1.3 GameLogic Package - Resource System
 
 **Resources:**
-- [ ] `Resource.swift` - Power, Food, Water, Caps
-- [ ] `ResourcePool.swift` - Current/max storage per resource
-- [ ] `ConsumptionRate.swift` - 0.36 units/min/dweller for food/water
+- [x] `Resource.swift` - Power, Food, Water, Caps (includes VaultResources struct)
+- [x] `ResourcePool.swift` - Current/max storage per resource (in `Resource.swift`)
+- [x] `ConsumptionRate.swift` - 0.36 units/min/dweller for food/water (in `Resource.swift`)
 
 **Medical Supplies:**
 - [ ] `Stimpak.swift` - Heal HP (40-50%)
@@ -99,23 +122,24 @@
 ### 1.4 GameLogic Package - Equipment System
 
 **Weapons:**
-- [ ] `Weapon.swift` - Name, damage range (min-max), type, rarity
-- [ ] `WeaponType.swift` - Pistol, Rifle, Shotgun, Energy, Heavy, Melee
-- [ ] `WeaponDatabase.swift` - All 50+ weapons from GDD
+- [x] `Weapon.swift` - Name, damage range (min-max), type, rarity
+- [x] `WeaponType.swift` - Pistol, Rifle, Shotgun, Energy, Heavy, Melee (in `Weapon.swift`)
+- [x] `WeaponDatabase.swift` - All 50+ weapons from GDD (in `Weapon.swift`)
 
 **Outfits:**
-- [ ] `Outfit.swift` - Name, SPECIAL bonuses, rarity
-- [ ] `OutfitDatabase.swift` - All outfits with stat bonuses
+- [x] `Outfit.swift` - Name, SPECIAL bonuses, rarity
+- [x] `OutfitDatabase.swift` - All outfits with stat bonuses (in `Outfit.swift`)
 
 **Pets:**
-- [ ] `Pet.swift` - Species, rarity, bonus type/value
-- [ ] `PetBonus.swift` - Damage, HP, wasteland junk/caps, return speed, crafting time, etc.
-- [ ] `PetDatabase.swift` - All pet types and bonuses
+- [x] `Pet.swift` - Species, rarity, bonus type/value
+- [x] `PetBonus.swift` - Damage, HP, wasteland junk/caps, return speed, crafting time, etc. (in `Pet.swift`)
+- [x] `PetDatabase.swift` - All pet types and bonuses (in `Pet.swift`)
 
 **Inventory:**
+- [x] `DwellerEquipment.swift` - Equipment loadout (weapon, outfit, pet slots)
+- [x] `ItemRarity.swift` - Common, Rare, Legendary with properties
 - [ ] `Inventory.swift` - Storage container with capacity
 - [ ] `InventorySlot.swift` - Item stack/count management
-- [ ] `Item.swift` - Base item protocol
 
 ### 1.5 GameLogic Package - Combat System
 
@@ -192,19 +216,22 @@
 ### 1.11 Database Models
 
 **Vault Model:**
-- [ ] `Vault.swift` - Fluent model for vault data
-- [ ] `CreateVault.swift` migration
-- [ ] Fields: owner_id, name, caps, power/food/water storage, population_cap
+- [x] `Vault.swift` - Fluent model for vault data
+- [x] `CreateVault.swift` migration
+- [x] Fields: owner_id, name, caps, power/food/water storage, population_cap
+- [x] Unique vault numbering system (vault_number field, never reused)
+- [x] `GlobalCounter.swift` - Atomic counter for vault numbers
+- [x] `CreateGlobalCounter.swift` migration
 
 **Dweller Model:**
-- [ ] `DwellerModel.swift` - Fluent model linking to GameLogic Dweller
-- [ ] `CreateDweller.swift` migration
-- [ ] Fields: vault_id, name, level, HP, radiation, SPECIAL stats, equipment IDs
+- [x] `DwellerModel.swift` - Fluent model linking to GameLogic Dweller
+- [x] `CreateDweller.swift` migration
+- [x] Fields: vault_id, name, level, HP, radiation, SPECIAL stats, equipment IDs
 
 **Room Model:**
-- [ ] `RoomModel.swift` - Fluent model for vault rooms
-- [ ] `CreateRoom.swift` migration
-- [ ] Fields: vault_id, type, level, x, y, width, assigned_dweller_ids
+- [x] `RoomModel.swift` - Fluent model for vault rooms
+- [x] `CreateRoom.swift` migration
+- [x] Fields: vault_id, type, level, x, y, width, assigned dwellers via relationship
 
 **Equipment Models:**
 - [ ] `WeaponModel.swift`, `OutfitModel.swift`, `PetModel.swift`
@@ -217,23 +244,23 @@
 ### 1.12 Telegram Controllers
 
 **Vault Controller:**
-- [ ] `VaultController.swift` - Main vault view
-- [ ] Vault status display (power, water, food bars)
-- [ ] Room grid emoji visualization
-- [ ] Quick actions menu
+- [x] `VaultController.swift` - Main vault view
+- [x] Vault status display (power, water, food bars)
+- [x] Room grid emoji visualization (in BuildController)
+- [x] Quick actions menu (Dwellers, Resources, Build, Rooms, Settings)
 
 **Build Controller:**
-- [ ] `BuildController.swift` - Room construction
-- [ ] Room type selection
-- [ ] Position selection
-- [ ] Cost confirmation
-- [ ] Upgrade/merge options
+- [x] `BuildController.swift` - Room construction
+- [x] Room type selection (category-based)
+- [x] Position selection with vault grid display
+- [x] Cost confirmation
+- [x] Upgrade rooms
+- [x] Merge adjacent rooms (auto-merge on build)
 
 **Dweller Controller:**
-- [ ] `DwellerController.swift` - Dweller management
-- [ ] Dweller list view
-- [ ] Dweller detail view (stats, equipment)
-- [ ] Assignment to rooms
+- [x] Dweller list view (in VaultController)
+- [x] Dweller detail view (stats, equipment)
+- [x] Assignment to rooms (in BuildController)
 - [ ] Training initiation
 
 **Inventory Controller:**
@@ -263,19 +290,26 @@
 
 ### 1.13 Localization Keys
 
-- [ ] Add all vault-related strings to `en.json` and `uk.json`:
-  - [ ] Room names and descriptions
+- [x] Registration strings (welcome, nickname prompt, validation errors)
+- [x] Vault UI strings (title, status, population)
+- [x] Dweller UI strings (list, detail, empty state)
+- [x] Resource display strings (title, consumption rates)
+- [x] Room names and descriptions (all 24 room types)
+- [x] Build/upgrade UI strings
+- [x] Room assignment strings
+- [ ] Add remaining vault-related strings to `en.json` and `uk.json`:
   - [ ] SPECIAL stat names
   - [ ] Equipment names
   - [ ] Incident messages
   - [ ] Exploration log templates
   - [ ] Quest text
-  - [ ] UI button labels
 
 ### 1.14 Real-time Updates
 
 **Background Tasks:**
-- [ ] `ProductionScheduler.swift` - Background resource generation
+- [x] `ResourceScheduler.swift` - Background resource consumption (food/water drain, health/radiation damage)
+- [x] `ProductionScheduler.swift` - Background resource generation (integrated into ResourceScheduler)
+- [x] `PowerBalanceSystem` - Power consumption vs production, room power state management
 - [ ] `TrainingScheduler.swift` - SPECIAL training timers
 - [ ] `ExplorationScheduler.swift` - Exploration event timing
 - [ ] `BreedingScheduler.swift` - Pregnancy/growth timers
@@ -437,12 +471,29 @@
 
 ## Next Immediate Steps
 
-1. **Start PostgreSQL container**
-2. **Verify bot runs correctly**
-3. **Begin GameLogic S.P.E.C.I.A.L. system implementation**
-4. **Create Vault and Dweller database models**
-5. **Implement VaultController for basic vault view**
+1. ~~**Start PostgreSQL container**~~ ✅
+2. ~~**Verify bot runs correctly**~~ ✅
+3. ~~**Begin GameLogic S.P.E.C.I.A.L. system implementation**~~ ✅
+4. ~~**Create Vault and Dweller database models**~~ ✅
+5. ~~**Implement VaultController for basic vault view**~~ ✅
+6. ~~**Add registration with nickname input**~~ ✅
+7. ~~**Implement unique vault numbering**~~ ✅
+8. ~~**Add ethnic names for locales**~~ ✅
+9. ~~**Localize remaining strings**~~ ✅
+
+**Current Focus:**
+1. ~~**Implement Room model and BuildController**~~ ✅
+2. ~~**Add room assignment for dwellers**~~ ✅
+3. ~~**Implement resource consumption**~~ ✅ - Background food/water drain with consequences
+4. ~~**Implement production cycle timing**~~ ✅ - Background resource generation with power balance
+5. ~~**Add room merging**~~ ✅ - Auto-merge adjacent same-type/level rooms on build
+6. **Add exploration system** - Send dwellers to wasteland
+
+**Future Vault Number Changes (Donation):**
+- Vault number change is prepared in architecture (vault_number field is independent)
+- Implementation needed: admin endpoint or donation handler to update vault_number
+- GlobalCounter ensures new numbers are unique even after changes
 
 ---
 
-*Last updated: January 2026*
+*Last updated: January 31, 2026* (Room merging, power balance, production system, dweller unassign)

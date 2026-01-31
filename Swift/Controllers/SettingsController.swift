@@ -35,13 +35,14 @@ final class SettingsController: TGControllerBase, @unchecked Sendable {
     }
     
     public func onStart(context: Context) async throws -> Bool {
-        let mainController = Controllers.mainController
-        try await mainController.showMainMenu(context: context)
-        context.session.routerName = mainController.routerName
+        // Go back to vault (vault is the main hub)
+        let vaultController = Controllers.vaultController
+        try await vaultController.showVaultMenu(context: context)
+        context.session.routerName = vaultController.routerName
         try await context.session.saveAndCache(in: context.db)
         return true
     }
-    
+
     private func onCancel(context: Context) async throws -> Bool {
         return try await onStart(context: context)
     }

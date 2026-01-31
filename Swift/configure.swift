@@ -20,6 +20,10 @@ let owner: Int64          = 123456789 // 123456789
 let helper: Int64         = 987654321 // 987654321
 let allowedUsers: [Int64] = [owner, helper]
 
+/// Set to true to erase all database tables on startup (for testing/development)
+/// WARNING: This will delete ALL data in the database!
+let resetDatabaseOnStartup: Bool = true
+
 // MARK: - Localization
 public enum SupportedLocale: String, CaseIterable, Codable, Sendable {
     case en = "en"
@@ -79,10 +83,23 @@ public func configure(logger: Logger) async throws {
 
     let migrations = Migrations()
     migrations.add(CreateUser())
+    migrations.add(CreateVault())
+    migrations.add(CreateRoom())  // Rooms before dwellers (dwellers reference rooms)
+    migrations.add(CreateDweller())
+    migrations.add(CreateGlobalCounter())
+    migrations.add(AddNicknameAndVaultNumber())
 
     let migrator = Migrator(databases: databases, migrations: migrations, logger: logger, on: MultiThreadedEventLoopGroup.singleton.any())
-    _ = migrator.setupIfNeeded()
-    _ = migrator.prepareBatch()
+
+    // Reset database if flag is enabled (for testing/development)
+    if resetDatabaseOnStartup {
+        logger.warning("⚠️ Database reset enabled - reverting all migrations...")
+        try await migrator.revertAllBatches().get()
+        logger.info("✅ All migrations reverted. Re-running migrations...")
+    }
+
+    try await migrator.setupIfNeeded().get()
+    try await migrator.prepareBatch().get()
 
     // MARK: - Localization
 
@@ -118,6 +135,10 @@ public func configure(logger: Logger) async throws {
 
     // Start the bot
     try await appState.bot.start()
+
+    // MARK: - Resource Scheduler
+    resourceScheduler = ResourceScheduler(appState: appState)
+    await resourceScheduler?.start()
 
     // MARK: - Notify admins about starting bot
     for user in allowedUsers {
