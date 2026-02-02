@@ -11,16 +11,15 @@ import SwiftTelegramBot
 
 struct Controllers {
     // MARK: - Controllers initialization.
-    static let registration             = Registration              (routerName: "registration")
-    static let settingsController       = SettingsController        (routerName: "settings")
-    static let vaultController          = VaultController           (routerName: "vault")
-    static let buildController          = BuildController           (routerName: "build")
+    // Only 3 controllers: Registration, Settings, and Vault (main game)
+    static let registration         = Registration          (routerName: "registration")
+    static let settingsController   = SettingsController    (routerName: "settings")
+    static let vaultController      = VaultController       (routerName: "vault")
 
     static let all: [TGControllerBase] = [
         registration,
         settingsController,
-        vaultController,
-        buildController
+        vaultController
     ]
 
     static func attachAllHandlers(for bot: TGBot, lingo: Lingo) async {

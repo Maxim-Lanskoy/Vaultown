@@ -16,13 +16,19 @@ import SwiftTelegramBot
 
 let store = RouterStore()
 
-let owner: Int64          = 123456789 // 123456789
-let helper: Int64         = 987654321 // 987654321
-let allowedUsers: [Int64] = [owner, helper]
+let owner: Int64          = 327887608 // 123456789
+let helper: Int64         = 768795585 // 987654321
+let mitya: Int64          = 398698463 // Temporary
+let allowedUsers: [Int64] = [owner, mitya, helper]
+let admins: [Int64]       = [       owner        ]
 
 /// Set to true to erase all database tables on startup (for testing/development)
 /// WARNING: This will delete ALL data in the database!
-let resetDatabaseOnStartup: Bool = true
+let resetDatabaseOnStartup: Bool = false
+
+/// Test mode: faster timers and higher chances for testing gameplay
+/// Set to false for production with realistic timers and chances
+let isTestMode: Bool = true
 
 // MARK: - Localization
 public enum SupportedLocale: String, CaseIterable, Codable, Sendable {
@@ -86,6 +92,8 @@ public func configure(logger: Logger) async throws {
     migrations.add(CreateVault())
     migrations.add(CreateRoom())  // Rooms before dwellers (dwellers reference rooms)
     migrations.add(CreateDweller())
+    migrations.add(CreateExploration())  // Explorations after dwellers (reference dwellers)
+    migrations.add(CreateIncident())  // Incidents after rooms
     migrations.add(CreateGlobalCounter())
     migrations.add(AddNicknameAndVaultNumber())
 
@@ -140,12 +148,30 @@ public func configure(logger: Logger) async throws {
     resourceScheduler = ResourceScheduler(appState: appState)
     await resourceScheduler?.start()
 
-    // MARK: - Notify admins about starting bot
-    for user in allowedUsers {
-        let chatId = TGChatId.chat(user)
+    // MARK: - Exploration Scheduler
+    explorationScheduler = ExplorationScheduler(appState: appState)
+    await explorationScheduler?.start()
+
+    // MARK: - Incident Scheduler
+    incidentScheduler = IncidentScheduler(appState: appState)
+    await incidentScheduler?.start()
+
+    // MARK: - Notify admins about starting bot (with keyboard restore)
+    for userId in admins {
+        let chatId = TGChatId.chat(userId)
         let text = "📟 Bot started."
-        let params = TGSendMessageParams(chatId: chatId, text: text, disableNotification: true)
-        _ = try? await appState.bot.sendMessage(params: params)
+
+        // Try to get user session and restore their keyboard
+        if let session = try? await User.query(on: db).filter(\.$telegramId == userId).first(),
+           let controller = Controllers.all.first(where: { $0.routerName == session.routerName }),
+           let markup = controller.generateControllerKB(session: session, lingo: lingo) {
+            let params = TGSendMessageParams(chatId: chatId, text: text, disableNotification: true, replyMarkup: markup)
+            _ = try? await appState.bot.sendMessage(params: params)
+        } else {
+            // No session yet - just send the message
+            let params = TGSendMessageParams(chatId: chatId, text: text, disableNotification: true)
+            _ = try? await appState.bot.sendMessage(params: params)
+        }
     }
 
     // MARK: - Hummingbird HTTP Server

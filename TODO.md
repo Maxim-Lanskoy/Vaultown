@@ -40,6 +40,14 @@
 - [x] Dweller assignment to rooms
 - [x] Localized room names (24 room types, EN/UK)
 - [x] Starting rooms created with new vault (8 rooms)
+- [x] Room merging (auto-merge adjacent same-type/level)
+- [x] Escalating room prices (baseCost × existingCount + 1)
+- [x] Room connection rules (elevator-based expansion)
+- [x] Dweller work indicator in list (room emoji or idle)
+- [x] Dweller unassign feature
+- [x] Production formula with SPECIAL + happiness bonus
+- [x] Power balance system (production vs consumption)
+- [x] Resource scheduler with background ticks
 
 ---
 
@@ -75,7 +83,8 @@
 
 **Death & Revival:**
 - [x] `RevivalSystem.swift` - Cost formula: `100 + (Level - 1) × 20 caps` (in `Dweller.swift`)
-- [ ] 24-hour revival timer
+- [x] Dweller revival UI in VaultController (revive button, caps deduction)
+- [ ] 24-hour revival timer (optional)
 
 ### 1.2 GameLogic Package - Vault System
 
@@ -91,8 +100,8 @@
 
 **Room Mechanics:**
 - [x] `Room.swift` - Room instance with position, level, assigned dwellers
-- [ ] `RoomProduction.swift` - Production cycle calculations
-- [ ] `ProductionFormula.swift` - `Cycle Time = Base_Time / (1 + Total_SPECIAL / 10 + Happiness_Bonus)`
+- [x] `RoomProduction.swift` - Production cycle calculations (in ResourceScheduler)
+- [x] `ProductionFormula.swift` - `Cycle Time = Base_Time / (1 + Total_SPECIAL / 10 + Happiness_Bonus)` (in ResourceScheduler)
 - [x] `RoomCapacity.swift` - Population and storage limits per room type (in `RoomType.swift`)
 
 **Vault Grid:**
@@ -155,18 +164,19 @@
 ### 1.6 GameLogic Package - Incidents
 
 **Incident Types:**
-- [ ] `Incident.swift` - Base incident with spawn/spread logic
-- [ ] `Fire.swift` - Spread to empty adjacent rooms
-- [ ] `Radroach.swift` - Weapon-based combat
-- [ ] `Raider.swift` - Enter from vault door, steal caps
-- [ ] `MoleRat.swift` - Spawn at dirt-adjacent rooms only
-- [ ] `FeralGhoul.swift` - HP + radiation damage
-- [ ] `Radscorpion.swift` - Teleport, heavy radiation
-- [ ] `Deathclaw.swift` - Tear through doors/elevators
+- [x] `Incident.swift` - Base incident with spawn/spread logic
+- [x] `IncidentType.swift` - All incident types with behaviors
+- [x] Fire - Spread to empty adjacent rooms
+- [x] Radroach - Weapon-based combat
+- [x] Raider - Enter from vault door, steal caps
+- [x] MoleRat - Combat with spread behavior
+- [x] FeralGhoul - HP + radiation damage
+- [x] Radscorpion - Heavy radiation damage
+- [x] Deathclaw - Highest damage, ignores doors
 
 **Incident Triggers:**
-- [ ] `IncidentSpawner.swift` - Rush failure incidents
-- [ ] `PopulationThresholds.swift` - Min population per incident type
+- [x] `RushAttempt` - Rush failure incidents (in Incident.swift)
+- [x] Population thresholds - Min population per incident type
 - [ ] `DeathclawTrigger.swift` - Hidden value accumulation formula
 
 ### 1.7 GameLogic Package - Production & Rush
@@ -191,15 +201,15 @@
 ### 1.9 GameLogic Package - Exploration
 
 **Wasteland Exploration:**
-- [ ] `Exploration.swift` - Automatic exploration with events
-- [ ] `ExplorationEvent.swift` - Combat, loot, location, NPC, radiation
-- [ ] `ExplorationLog.swift` - Text log generation
-- [ ] `ExplorationLoot.swift` - Item/caps generation based on Luck
+- [x] `Exploration.swift` - Automatic exploration with events
+- [x] `ExplorationEvent.swift` - Combat, loot, location, NPC, radiation
+- [x] `ExplorationLog.swift` - Text log generation (integrated in Exploration)
+- [x] `ExplorationLoot.swift` - Item/caps generation based on Luck (integrated in Exploration)
 
 **Explorer Mechanics:**
-- [ ] `ExplorerSupplies.swift` - Stimpak/RadAway auto-use thresholds
-- [ ] `ExplorerReturn.swift` - Return time = 50% of exploration time
-- [ ] `RadiationImmunity.swift` - E11+ = immune in wasteland
+- [x] `ExplorerSupplies.swift` - Stimpak/RadAway auto-use thresholds (integrated in Exploration)
+- [x] `ExplorerReturn.swift` - Return time = 50% of exploration time (integrated in Exploration)
+- [x] `RadiationImmunity.swift` - E11+ = immune in wasteland (integrated in Exploration)
 
 ### 1.10 GameLogic Package - Quests
 
@@ -249,44 +259,29 @@
 - [x] Room grid emoji visualization (in BuildController)
 - [x] Quick actions menu (Dwellers, Resources, Build, Rooms, Settings)
 
-**Build Controller:**
-- [x] `BuildController.swift` - Room construction
-- [x] Room type selection (category-based)
-- [x] Position selection with vault grid display
-- [x] Cost confirmation
-- [x] Upgrade rooms
-- [x] Merge adjacent rooms (auto-merge on build)
-
-**Dweller Controller:**
-- [x] Dweller list view (in VaultController)
-- [x] Dweller detail view (stats, equipment)
-- [x] Assignment to rooms (in BuildController)
+**VaultController (consolidated - all game features):**
+- [x] Room building (category selection, position, cost confirmation)
+- [x] Room upgrades and auto-merge adjacent rooms
+- [x] Dweller list and detail views
+- [x] Dweller assignment to rooms
+- [x] Dweller revival (revive dead dwellers for caps)
+- [x] Wasteland exploration (send, view log, recall, collect)
+- [x] Incident handling (view, send fighters, use stimpaks)
+- [x] Incident alerts (push notification when incident spawns)
+- [x] All slash commands registered (/vault, /dwellers, /build, /rooms, /explore, /incidents, /resources)
 - [ ] Training initiation
 
 **Inventory Controller:**
-- [ ] `InventoryController.swift` - Item management
+- [ ] `InventoryController.swift` - Item management (add to VaultController when needed)
 - [ ] Weapon/outfit/pet tabs
 - [ ] Equip/unequip actions
 - [ ] Sell items
 
-**Exploration Controller:**
-- [ ] `ExplorationController.swift` - Wasteland exploration
-- [ ] Send dweller to explore
-- [ ] View exploration log
-- [ ] Recall explorer
-- [ ] Collect loot on return
-
 **Quest Controller:**
-- [ ] `QuestController.swift` - Quest management
+- [ ] Quest management (add to VaultController when needed)
 - [ ] Available quests list
 - [ ] Party formation
 - [ ] Quest progress/combat UI
-
-**Incident Controller:**
-- [ ] `IncidentController.swift` - Handle active incidents
-- [ ] Incident alerts
-- [ ] Manual Stimpak usage during combat
-- [ ] Victory/defeat handling
 
 ### 1.13 Localization Keys
 
@@ -300,7 +295,7 @@
 - [ ] Add remaining vault-related strings to `en.json` and `uk.json`:
   - [ ] SPECIAL stat names
   - [ ] Equipment names
-  - [ ] Incident messages
+  - [x] Incident messages (added EN/UK localization)
   - [ ] Exploration log templates
   - [ ] Quest text
 
@@ -311,14 +306,15 @@
 - [x] `ProductionScheduler.swift` - Background resource generation (integrated into ResourceScheduler)
 - [x] `PowerBalanceSystem` - Power consumption vs production, room power state management
 - [ ] `TrainingScheduler.swift` - SPECIAL training timers
-- [ ] `ExplorationScheduler.swift` - Exploration event timing
+- [x] `ExplorationScheduler.swift` - Exploration event timing
+- [x] `IncidentScheduler.swift` - Incident combat ticks and random spawns
 - [ ] `BreedingScheduler.swift` - Pregnancy/growth timers
 
 **Notification System:**
 - [ ] Production ready notifications
 - [ ] Training complete notifications
 - [ ] Explorer return notifications
-- [ ] Incident alerts
+- [x] Incident alerts (via VaultController.sendIncidentAlert)
 
 ---
 
@@ -487,7 +483,8 @@
 3. ~~**Implement resource consumption**~~ ✅ - Background food/water drain with consequences
 4. ~~**Implement production cycle timing**~~ ✅ - Background resource generation with power balance
 5. ~~**Add room merging**~~ ✅ - Auto-merge adjacent same-type/level rooms on build
-6. **Add exploration system** - Send dwellers to wasteland
+6. ~~**Add exploration system**~~ ✅ - Send dwellers to wasteland with event generation
+7. ~~**Add incident system**~~ ✅ - Random events (fires, radroaches, raiders)
 
 **Future Vault Number Changes (Donation):**
 - Vault number change is prepared in architecture (vault_number field is independent)
@@ -496,4 +493,4 @@
 
 ---
 
-*Last updated: January 31, 2026* (Room merging, power balance, production system, dweller unassign)
+*Last updated: February 2, 2026* (Controller consolidation, dweller revival, slash commands fix)

@@ -152,16 +152,21 @@ final class VaultController: TGControllerBase, @unchecked Sendable {
 
 Location: `Swift/Controllers/AllControllers.swift`
 
+Only 3 controllers exist (controllers = screens/menus):
+
 ```swift
 struct Controllers {
-    static let vaultController = VaultController(routerName: "vault")
+    static let registration       = Registration(routerName: "registration")
     static let settingsController = SettingsController(routerName: "settings")
+    static let vaultController    = VaultController(routerName: "vault")
 
     static let all: [TGControllerBase] = [
-        vaultController, settingsController
+        registration, settingsController, vaultController
     ]
 }
 ```
+
+**VaultController** handles all game features: building, exploration, incidents, dwellers, resources.
 
 ---
 
@@ -275,12 +280,13 @@ Hummingbird provides endpoint: `http://localhost:8080/health`
 
 ### Phase 1: Telegram MVP
 
-- [ ] Implement all core game mechanics in GameLogic
-- [ ] Vault building and room management
-- [ ] Dweller system with S.P.E.C.I.A.L.
-- [ ] Resource production and collection
-- [ ] Basic incidents (fires, radroaches, raiders)
-- [ ] Wasteland exploration (automatic)
+- [x] Implement all core game mechanics in GameLogic
+- [x] Vault building and room management
+- [x] Dweller system with S.P.E.C.I.A.L.
+- [x] Resource production and collection
+- [x] Wasteland exploration (automatic)
+- [x] Incidents (fires, radroaches, raiders, deathclaws, etc.)
+- [x] Dweller revival system
 - [ ] Equipment and inventory
 - [ ] Multiplayer basics (referrals, co-management)
 - [ ] Basic guild system

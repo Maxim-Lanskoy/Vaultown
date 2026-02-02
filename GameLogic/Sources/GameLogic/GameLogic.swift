@@ -24,3 +24,17 @@ public let gameTitle = "Vaultown"
 // - DwellerRarity: Common (12 pts), Rare (28 pts), Legendary (40 pts)
 // - Gender: Male/Female for breeding mechanics
 // - NameGenerator: Random name generation from predefined pools
+
+// Exploration System
+// - Exploration: Active/completed exploration with dweller, events, loot
+// - ExplorationEvent: Event types (combat, loot, NPC, radiation, location)
+// - ExplorationEventType: Enum of all event types
+// - ExplorationEnemy: Enemy types with damage, HP, XP values
+// - ExplorationStatus: exploring, returning, completed, dead
+
+// Incident System
+// - IncidentType: Fire, Radroach, MoleRat, Raider, FeralGhoul, Radscorpion, Deathclaw
+// - Incident: Active incident tracking with HP, spread, combat log
+// - IncidentCombatEntry: Combat log entries for incident battles
+// - RushAttempt: Rush room production with failure probability
+// - RushResult: Outcome of rush attempt (success/fail with incident)
