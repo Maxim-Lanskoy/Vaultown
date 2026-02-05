@@ -2,7 +2,9 @@
 //  Context.swift
 //  Vaultown
 //
-//  Created by Maxim Lanskoy on 13.06.2025.
+//  Request context for Telegram bot command handlers
+//
+//  Created by Maxim Lanskoy on 29.01.2026.
 //
 
 import Foundation

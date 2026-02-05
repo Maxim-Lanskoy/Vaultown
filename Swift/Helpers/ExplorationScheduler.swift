@@ -4,6 +4,8 @@
 //
 //  Background scheduler for exploration event generation
 //
+//  Created by Maxim Lanskoy on 02.02.2026.
+//
 
 import Foundation
 import Fluent

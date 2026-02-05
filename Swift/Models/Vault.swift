@@ -2,7 +2,9 @@
 //  Vault.swift
 //  Vaultown
 //
-//  Fluent model for player vaults
+//  Fluent model for player vaults with resources and population
+//
+//  Created by Maxim Lanskoy on 31.01.2026.
 //
 
 import Fluent

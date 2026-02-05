@@ -4,6 +4,8 @@
 //
 //  Migration for global counters table
 //
+//  Created by Maxim Lanskoy on 31.01.2026.
+//
 
 import Fluent
 

@@ -4,6 +4,8 @@
 //
 //  Migration to create the incidents table
 //
+//  Created by Maxim Lanskoy on 02.02.2026.
+//
 
 import Fluent
 

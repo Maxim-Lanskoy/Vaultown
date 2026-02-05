@@ -4,6 +4,8 @@
 //
 //  Background scheduler for resource consumption and vault updates
 //
+//  Created by Maxim Lanskoy on 31.01.2026.
+//
 
 import Foundation
 import Fluent

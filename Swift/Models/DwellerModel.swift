@@ -2,7 +2,9 @@
 //  DwellerModel.swift
 //  Vaultown
 //
-//  Fluent model for vault dwellers
+//  Fluent model for vault dwellers with SPECIAL stats
+//
+//  Created by Maxim Lanskoy on 31.01.2026.
 //
 
 import Fluent

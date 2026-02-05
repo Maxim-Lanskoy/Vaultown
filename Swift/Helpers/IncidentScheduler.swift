@@ -4,6 +4,8 @@
 //
 //  Background scheduler for incident combat and spawning
 //
+//  Created by Maxim Lanskoy on 02.02.2026.
+//
 
 import Foundation
 import Fluent

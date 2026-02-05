@@ -2,7 +2,9 @@
 //  configure.swift
 //  Vaultown
 //
-//  Created by Maxim Lanskoy on 13.06.2025.
+//  Application configuration with database, bot, and scheduler setup
+//
+//  Created by Maxim Lanskoy on 29.01.2026.
 //
 
 import FluentPostgresDriver
@@ -16,11 +18,9 @@ import SwiftTelegramBot
 
 let store = RouterStore()
 
-let owner: Int64          = 327887608 // 123456789
-let helper: Int64         = 768795585 // 987654321
-let mitya: Int64          = 398698463 // Temporary
-let allowedUsers: [Int64] = [owner, mitya, helper]
-let admins: [Int64]       = [       owner        ]
+let owner: Int64          = 123456789 // 123456789
+let helper: Int64         = 987654321 // 987654321
+let allowedUsers: [Int64] = [owner, helper]
 
 /// Set to true to erase all database tables on startup (for testing/development)
 /// WARNING: This will delete ALL data in the database!

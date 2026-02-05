@@ -2,7 +2,9 @@
 //  SettingsController.swift
 //  Vaultown
 //
-//  Created by Maxim Lanskoy on 13.06.2025.
+//  User settings management including language preferences
+//
+//  Created by Maxim Lanskoy on 29.01.2026.
 //
 
 import Foundation

@@ -2,7 +2,9 @@
 //  GlobalCommandsController.swift
 //  Vaultown
 //
-//  Created by Maxim Lanskoy on 13.06.2025.
+//  Controller for global bot commands (/help, /settings, /buttons)
+//
+//  Created by Maxim Lanskoy on 29.01.2026.
 //
 
 import Fluent

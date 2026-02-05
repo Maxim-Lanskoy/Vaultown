@@ -2,7 +2,9 @@
 //  User.swift
 //  Vaultown
 //
-//  Created by Maxim Lanskoy on 13.06.2025.
+//  Fluent model for Telegram user sessions
+//
+//  Created by Maxim Lanskoy on 29.01.2026.
 //
 
 import Fluent

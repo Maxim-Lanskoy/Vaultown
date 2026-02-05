@@ -4,6 +4,8 @@
 //
 //  Main game controller for vault management (build, exploration, incidents, dwellers)
 //
+//  Created by Maxim Lanskoy on 31.01.2026.
+//
 
 import Foundation
 import Fluent

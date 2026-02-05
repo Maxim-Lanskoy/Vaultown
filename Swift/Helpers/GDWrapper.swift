@@ -2,8 +2,9 @@
 //  GDWrapper.swift
 //  Vaultown
 //
-//  Minimal libgd wrapper for image generation.
-//  Fixes Swift 6 compatibility issues in SwiftGD.
+//  Minimal libgd wrapper for image generation with Swift 6 compatibility
+//
+//  Created by Maxim Lanskoy on 29.01.2026.
 //
 
 import Foundation

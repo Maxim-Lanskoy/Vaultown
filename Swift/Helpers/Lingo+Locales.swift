@@ -1,8 +1,10 @@
 //
-//  Lingo+Locales.swift.swift
+//  Lingo+Locales.swift
 //  Vaultown
 //
-//  Created by Maxim Lanskoy on 27.12.2025.
+//  Lingo extensions for SupportedLocale enum integration
+//
+//  Created by Maxim Lanskoy on 29.01.2026.
 //
 
 import Lingo

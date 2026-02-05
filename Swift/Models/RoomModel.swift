@@ -2,7 +2,9 @@
 //  RoomModel.swift
 //  Vaultown
 //
-//  Fluent model for vault rooms
+//  Fluent model for vault rooms with production and power management
+//
+//  Created by Maxim Lanskoy on 31.01.2026.
 //
 
 import Fluent

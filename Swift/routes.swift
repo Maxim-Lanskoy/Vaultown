@@ -2,7 +2,9 @@
 //  routes.swift
 //  Vaultown
 //
-//  Created by Maxim Lanskoy on 13.06.2025.
+//  RouterStore actor for Telegram controller routing
+//
+//  Created by Maxim Lanskoy on 29.01.2026.
 //
 
 import Fluent

@@ -4,6 +4,8 @@
 //
 //  Migration to create vaults table
 //
+//  Created by Maxim Lanskoy on 31.01.2026.
+//
 
 import Fluent
 

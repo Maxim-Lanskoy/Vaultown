@@ -4,6 +4,8 @@
 //
 //  Migration to create dwellers table
 //
+//  Created by Maxim Lanskoy on 31.01.2026.
+//
 
 import Fluent
 

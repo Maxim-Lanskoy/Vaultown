@@ -2,7 +2,9 @@
 //  Arguments.swift
 //  Vaultown
 //
-//  Created by Maxim Lanskoy on 13.06.2025.
+//  Command argument parser with Scanner extensions
+//
+//  Created by Maxim Lanskoy on 29.01.2026.
 //
 
 import Foundation

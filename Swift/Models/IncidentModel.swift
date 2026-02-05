@@ -4,6 +4,8 @@
 //
 //  Fluent model for active incidents in vaults
 //
+//  Created by Maxim Lanskoy on 02.02.2026.
+//
 
 import Fluent
 import Foundation

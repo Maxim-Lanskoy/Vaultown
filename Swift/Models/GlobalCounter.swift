@@ -4,6 +4,8 @@
 //
 //  Global counters for unique sequences (vault numbers, etc.)
 //
+//  Created by Maxim Lanskoy on 31.01.2026.
+//
 
 import Fluent
 import Foundation

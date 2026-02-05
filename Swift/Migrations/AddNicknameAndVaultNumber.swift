@@ -4,6 +4,8 @@
 //
 //  Migration for adding nickname to users and vault_number to vaults
 //
+//  Created by Maxim Lanskoy on 31.01.2026.
+//
 
 import Fluent
 

@@ -2,7 +2,9 @@
 //  ExplorationModel.swift
 //  Vaultown
 //
-//  Fluent model for active/completed explorations
+//  Fluent model for active and completed wasteland explorations
+//
+//  Created by Maxim Lanskoy on 02.02.2026.
 //
 
 import Fluent
